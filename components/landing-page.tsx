@@ -1,46 +1,87 @@
+'use client'
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { FC } from "react";
 
 const AppTitle: FC = function () {
-	return (
-		<>
-			<section className="bg-white">
-				<div className="mx-auto px-4 pt-8 text-center lg:px-12 lg:pt-16">
-					<h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-black md:text-5xl lg:text-6xl">
-						Ace your NPTEL course
-					</h1>
-					<p className="mb-6 text-gray-700 sm:px-16 md:text-lg lg:text-xl xl:px-48 font-thin">
-						Welcome to &quot;Forests and Their Management&quot;
-						Quiz Platform. Prepare for your NPTEL FAT with this
-						platform featuring 12 quizzes all the way from
-						weeks 1 to 12.
-					</p>
-					<div className="flex flex-col lg:mt-[8%] mt-[25%] space-y-4 sm:flex-row sm:justify-center sm:space-x-4 sm:space-y-0">
-						<Link href="/choice">
-							<button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-md md:text-xl font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
-								<span className="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0">
-									🚀 Start Practising 🚀
-								</span>
-							</button>
-						</Link>
-					</div>
-				</div>
-			</section>
-			<div className="font-mono mt-14 md:mt-8 text-center p-8 md:p-16 leading-loose text-slate-400">
-				Please feel free to contribute to this project! Your inputs
-				can make it even better. If you have ideas or improvements,
-				feel free to drop a PR{" "}
-				<a
-					href="https://github.com/therealdhrxv/nptel/"
-					target="_blank"
-					className="text-blue-500"
-				>
-					<u> here.</u>
-				</a>{" "}
-				If this has helped you, please consider starring the repo.
-			</div>
-		</>
-	);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
+
+  // Check if user is logged in by verifying token
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  // Sign out handler
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    router.push("/signin");
+  };
+
+  return (
+    <>
+      <section className="bg-white">
+        <div className="mx-auto px-4 pt-8 text-center lg:px-12 lg:pt-16">
+          <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-black md:text-5xl lg:text-6xl">
+            Ace your NPTEL course
+          </h1>
+          <p className="mb-6 text-gray-700 sm:px-16 md:text-lg lg:text-xl xl:px-48 font-thin">
+            Welcome to &quot;Forests and Their Management&quot; Quiz Platform.
+            Prepare for your NPTEL FAT with this platform featuring 12 quizzes
+            all the way from weeks 1 to 12.
+          </p>
+
+          {/* Conditionally render Sign In or Sign Out button based on authentication status */}
+          <div className="flex flex-col lg:mt-[8%] mt-[25%] space-y-4 sm:flex-row sm:justify-center sm:space-x-4 sm:space-y-0">
+            {isAuthenticated ? (
+              <button
+                onClick={handleSignOut}
+                className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-md md:text-xl font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"
+              >
+                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0">
+                  🚪 Sign Out 🚪
+                </span>
+              </button>
+            ) : (
+              <Link href="/signin">
+                <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-md md:text-xl font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
+                  <span className="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0">
+                    🚀 Sign In 🚀
+                  </span>
+                </button>
+              </Link>
+            )}
+
+            <Link href="/choice">
+              <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-md md:text-xl font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
+                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0">
+                  🚀 Start Practising 🚀
+                </span>
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <div className="font-mono mt-14 md:mt-8 text-center p-8 md:p-16 leading-loose text-slate-400">
+        Please feel free to contribute to this project! Your inputs can make it
+        even better. If you have ideas or improvements, feel free to drop a PR{" "}
+        <a
+          href="https://github.com/therealdhrxv/nptel/"
+          target="_blank"
+          className="text-blue-500"
+        >
+          <u> here.</u>
+        </a>{" "}
+        If this has helped you, please consider starring the repo.
+      </div>
+    </>
+  );
 };
 
 export default AppTitle;
